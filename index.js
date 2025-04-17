@@ -231,6 +231,21 @@ app.get("/api/submissions", async (req, res) => {
     res.status(500).json({ message: "❌ Failed to fetch submissions" });
   }
 });
+// Get a single submission by ID
+app.get("/api/submission/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const submission = await Submission.findById(id);
+    if (!submission) {
+      return res.status(404).json({ message: "❌ Submission not found" });
+    }
+    res.status(200).json(submission);
+  } catch (error) {
+    console.error("❌ Error fetching submission:", error.message);
+    res.status(500).json({ message: "❌ Failed to fetch submission" });
+  }
+});
 
 // -------------------- Connect to MongoDB & Start Server --------------------
 mongoose.connect(MONGO_URI).then(() => {
